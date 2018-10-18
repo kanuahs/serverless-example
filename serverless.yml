@@ -1,0 +1,28 @@
+service: env-test-lambda # NOTE: update this with your service name
+
+app: myapp
+tenant: kanuahs
+
+provider:
+  name: aws
+  runtime: python2.7
+  region: us-east-1
+  stage: dev
+  apiKeys:
+    - mykey
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /user/env
+          method: GET
+          private: true
+    environment:
+      service: "Lambda"
+      username: ${file(credentials.yml):creds.username}
+      password: ${file(credentials.yml):creds.password}
